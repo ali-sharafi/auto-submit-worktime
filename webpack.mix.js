@@ -1,7 +1,8 @@
 const mix = require('laravel-mix');
+
 mix
-    .js("src/background/app.ts", "dist/background.js")
-    .js("src/tools/tools.ts", "dist/tools.js")
+    .js("src/app.ts", "dist/js/app.js")
+    .sass('src/scss/app.scss', 'dist/css/app.css')
     .webpackConfig({
         module: {
             rules: [
