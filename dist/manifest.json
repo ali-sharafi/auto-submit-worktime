@@ -1,0 +1,32 @@
+{
+	"manifest_version": 3,
+	"name": "Google Translate Helper",
+	"description": "Add your new vocabulary to learning docs",
+	"version": "1.0",
+	"background": {
+		"service_worker": "background.js"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"background.js"
+			]
+		}
+	],
+	"permissions": [
+		"webRequest",
+		"tabs",
+		"scripting"
+	],
+	"host_permissions": [
+		"*://*/*"
+	],
+	"action": {
+		"default_icon": "icon.png",
+		"default_title": "Google Translate Helper"
+	}
+}
