@@ -25,5 +25,7 @@
     "ts-loader": "^9.2.8",
     "typescript": "^4.6.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.26.1"
+  }
 }
