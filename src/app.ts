@@ -14,14 +14,20 @@ class Translator {
         let selected = document.getSelection()?.toString().trim();
         if (selected && this.isSelectedValid(selected)) {
             this.wordsList.push(selected);
-            this.createModal()
+            console.log(process.env.ACTIVE_DICT);
+            this.translateWord(selected);
         }
+    }
+
+    async translateWord(word: string) {
+        let dictionaryService = process.env.ACTIVE_DICT
     }
 
     createModal() {
         if (document.querySelector('.translator-wraper')) return;
-        
+
         let divWraper = document.createElement('div');
+        divWraper.id = 'main-wraper';
         divWraper.className = 'translator-wraper';
         document.body.append(divWraper);
     }
