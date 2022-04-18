@@ -18,6 +18,7 @@
   "devDependencies": {
     "@types/chrome": "0.0.181",
     "cross-env": "^7.0.3",
+    "dotenv-webpack": "^7.1.0",
     "laravel-mix": "^6.0.43",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.50.0",

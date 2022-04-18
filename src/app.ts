@@ -1,3 +1,5 @@
+// import DictionaryService from "./services/DictionaryService";
+
 class Translator {
     wordsList: Array<string>;
 
@@ -14,13 +16,15 @@ class Translator {
         let selected = document.getSelection()?.toString().trim();
         if (selected && this.isSelectedValid(selected)) {
             this.wordsList.push(selected);
-            console.log(process.env.ACTIVE_DICT);
+            console.log(process.env.ACTIVE_DICT, 'word: ', selected);
+            this.createModal();
             this.translateWord(selected);
         }
     }
 
     async translateWord(word: string) {
-        let dictionaryService = process.env.ACTIVE_DICT
+        // let dictionaryService = new DictionaryService();
+        // dictionaryService.readTranslate(word);
     }
 
     createModal() {

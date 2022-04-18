@@ -1,5 +1,4 @@
 import { TranslateResult, TranslatorInterface } from "../contract/TranslatorInterface";
-
 class DictionaryService implements TranslatorInterface {
     async readTranslate(word: string): Promise<TranslateResult> {
         //TODO
@@ -10,4 +9,4 @@ class DictionaryService implements TranslatorInterface {
     }
 }
 
-export default new DictionaryService();
+export default DictionaryService;
