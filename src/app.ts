@@ -1,4 +1,5 @@
-// import DictionaryService from "./services/DictionaryService";
+import { TranslateResult } from "./contract/TranslatorInterface";
+import DictionaryService from "./services/DictionaryService";
 
 class Translator {
     wordsList: Array<string>;
@@ -22,9 +23,9 @@ class Translator {
         }
     }
 
-    async translateWord(word: string) {
-        // let dictionaryService = new DictionaryService();
-        // dictionaryService.readTranslate(word);
+    async translateWord(word: string): Promise<TranslateResult | null> {
+        let dictionaryService = new DictionaryService();
+        return await dictionaryService.readTranslate(word);
     }
 
     createModal() {

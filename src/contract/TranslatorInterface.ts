@@ -1,5 +1,6 @@
 export type TranslateResult = {
-    meaning: string;
+    word:string;
+    meanings: Array<string>;
     examples: Array<string>;
 }
 
