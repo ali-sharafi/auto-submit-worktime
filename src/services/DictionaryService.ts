@@ -11,15 +11,30 @@ class DictionaryService implements TranslatorInterface {
     }
 
     parseResult(response: DictionaryResponse): TranslateResult {
-        const definitions = response.data.content.luna.entries;
-        let result = {
-            word: response.data.displayForm
+        console.log('response: ', response);
+        return {
+            word: response.data.displayForm,
+            meanings: this.getMeanings(response),
+            examples: this.getLearnersExamples(response)
         };
+    }
 
+    getLearnersExamples(response: DictionaryResponse): Array<string> {
+        const learners = response.data.content.learners;
+        const learnersDefinitions = learners.flatMap(item => item.definitions);
+        return [...learnersDefinitions.map(item => item.defs)];
+    }
+
+    getMeanings(response: DictionaryResponse): Array<string> {
+        const definitions = response.data.content.luna.entries;
+        let result = [];
         for (let i = 0; i < definitions.length; i++) {
-            const element = definitions[i];
-
+            const posBlocks = definitions[i].posBlocks;
+            const definitionBlock = posBlocks.flatMap(item => item.definitions);
+            result.push(...definitionBlock.map(def => def.definition));
         }
+
+        return result;
     }
 
     async getTranslation(word: string): Promise<DictionaryResponse | null> {

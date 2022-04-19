@@ -13,13 +13,14 @@ class Translator {
         document.addEventListener('mouseup', () => this.handleSelectedText());
     }
 
-    handleSelectedText(): void {
+    async handleSelectedText(): Promise<void> {
         let selected = document.getSelection()?.toString().trim();
         if (selected && this.isSelectedValid(selected)) {
             this.wordsList.push(selected);
             console.log(process.env.ACTIVE_DICT, 'word: ', selected);
             this.createModal();
-            this.translateWord(selected);
+            let translation = await this.translateWord(selected);
+            console.log('translation: ', translation);
         }
     }
 
