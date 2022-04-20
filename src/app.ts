@@ -1,5 +1,7 @@
+import Vue from "vue";
 import { TranslateResult } from "./contract/TranslatorInterface";
 import DictionaryService from "./services/DictionaryService";
+import App from './assets/js/App.vue';
 
 class Translator {
     wordsList: Array<string>;
@@ -17,11 +19,17 @@ class Translator {
         let selected = document.getSelection()?.toString().trim();
         if (selected && this.isSelectedValid(selected)) {
             this.wordsList.push(selected);
-            console.log(process.env.ACTIVE_DICT, 'word: ', selected);
-            this.createModal();
             let translation = await this.translateWord(selected);
-            console.log('translation: ', translation);
+            this.createModal();
+            this.mountDataToPage(translation);
         }
+    }
+
+    mountDataToPage(translation: TranslateResult | null) {
+        new Vue({
+            el: '#main-wraper',
+            render: h => h(App, { props: { translation: translation } })
+        })
     }
 
     async translateWord(word: string): Promise<TranslateResult | null> {
@@ -33,8 +41,10 @@ class Translator {
         if (document.querySelector('.translator-wraper')) return;
 
         let divWraper = document.createElement('div');
-        divWraper.id = 'main-wraper';
         divWraper.className = 'translator-wraper';
+        let innerContainer = document.createElement('div');
+        innerContainer.id = 'main-wraper';
+        divWraper.append(innerContainer);
         document.body.append(divWraper);
     }
 
