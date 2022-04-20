@@ -16,7 +16,8 @@ export type DictionaryResponse = {
                 definitions: [{
                     defs: array<string>
                 }]
-            }]
+            }],
+            examples: Array<{ sentence: string }>
         }
     }
 }
