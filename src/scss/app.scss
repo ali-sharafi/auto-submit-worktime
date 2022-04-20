@@ -1,5 +1,5 @@
 .translator-wraper {
-    backdrop-filter: blur(35px);
+    backdrop-filter: blur(20px);
     display: flex;
     justify-content: flex-start;
     right: 0;
@@ -7,4 +7,5 @@
     height: 300px;
     width: 400px;
     position: fixed;
+    z-index: 1000;
 }
