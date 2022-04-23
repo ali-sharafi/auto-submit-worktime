@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import StorageService from "../../services/StorageService";
 import {
   Tabs,
   TabPane,
@@ -83,7 +84,7 @@ export default {
   },
   methods: {
     save() {
-      console.log("saved");
+      StorageService.store(this.localTranslation.word, this.items);
     },
     close() {
       this.hidden = true;
