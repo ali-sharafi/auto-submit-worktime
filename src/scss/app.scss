@@ -10,6 +10,8 @@
     z-index: 1000;
     animation: 2s fadeIn;
     transition:visibility 0.3s linear,opacity 0.3s linear;
+    direction: ltr;
+    text-align: left;
 }
 
 @keyframes fadeIn {
