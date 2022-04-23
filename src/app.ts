@@ -54,7 +54,9 @@ class Translator {
     }
 
     isSelectedValid(selected: string): boolean {
-        return !!(isNaN(Number(selected)) && this.wordsList.indexOf(selected) === -1)
+        return !!(isNaN(Number(selected)) &&
+            this.wordsList.indexOf(selected) === -1 &&
+            selected.split(' ').length === 1)
     }
 }
 
