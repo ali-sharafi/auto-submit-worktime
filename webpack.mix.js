@@ -3,6 +3,7 @@ const Dotenv = require('dotenv-webpack');
 
 mix
     .js("src/app.ts", "dist/js/app.js")
+    .js("src/serviceWorker.ts", "dist/js/main.js")
     .sass('src/scss/app.scss', 'dist/css/app.css')
     .webpackConfig({
         resolve: {
