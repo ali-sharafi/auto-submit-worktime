@@ -8,4 +8,16 @@
     width: 400px;
     position: fixed;
     z-index: 1000;
+    animation: 2s fadeIn;
+    transition:visibility 0.3s linear,opacity 0.3s linear;
 }
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
