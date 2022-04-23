@@ -1,6 +1,6 @@
 {
 	"manifest_version": 3,
-	"name": "Google Translate Helper",
+	"name": "Translator",
 	"description": "Add your new vocabulary to learning docs",
 	"version": "1.0",
 	"content_scripts": [
@@ -27,6 +27,6 @@
 	],
 	"action": {
 		"default_icon": "icon.png",
-		"default_title": "Google Translate Helper"
+		"default_title": "Translator"
 	}
 }
