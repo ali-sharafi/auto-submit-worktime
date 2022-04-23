@@ -32,8 +32,10 @@ class Translator {
                 el: '#main-wraper',
                 render: h => h(App, { props: { translation: this.translation } })
             });
+        } else {
+            Vue.set(this.appComponent.$children[0], 'localTranslation', this.translation)
+            Vue.set(this.appComponent.$children[0], 'hidden', false)
         }
-        console.log('vue: ', this.appComponent);
     }
 
     async translateWord(word: string): Promise<TranslateResult | null> {
@@ -45,7 +47,6 @@ class Translator {
         if (document.querySelector('.translator-wraper')) return;
 
         let divWraper = document.createElement('div');
-        divWraper.className = 'translator-wraper';
         let innerContainer = document.createElement('div');
         innerContainer.id = 'main-wraper';
         divWraper.append(innerContainer);
