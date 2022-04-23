@@ -3,6 +3,9 @@
 	"name": "Translator",
 	"description": "Add your new vocabulary to learning docs",
 	"version": "1.0",
+	"background": {
+		"service_worker": "/js/main.js"
+	},
 	"content_scripts": [
 		{
 			"matches": [
@@ -18,8 +21,7 @@
 		}
 	],
 	"permissions": [
-		"webRequest",
-		"tabs",
+		"identity",
 		"scripting"
 	],
 	"host_permissions": [
@@ -28,5 +30,15 @@
 	"action": {
 		"default_icon": "icon.png",
 		"default_title": "Translator"
+	},
+	"oauth2": {
+		"client_id": "932312406121-pu5i9cd7odo0gvp55gpr9t9eh28seiu0.apps.googleusercontent.com",
+		"scopes": [
+			"https://www.googleapis.com/auth/spreadsheets",
+			"https://www.googleapis.com/auth/drive",
+			"https://www.googleapis.com/auth/drive.readonly",
+			"https://www.googleapis.com/auth/drive.file",
+			"https://www.googleapis.com/auth/spreadsheets.readonly"
+		]
 	}
 }
