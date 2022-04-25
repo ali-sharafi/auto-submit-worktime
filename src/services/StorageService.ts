@@ -7,15 +7,49 @@ const StorageService = class {
 
     store(word: string, meanings: Array<string>): void {
         let stringifyMeanings = '';
-        if (meanings.length > 1)
+        let definitionsID = '';
+        if (meanings.length > 1) {
             stringifyMeanings = this.parseMeanings(meanings);
-        else stringifyMeanings = meanings[0].replace(/<[^>]*>/g, "");
+            definitionsID = this.generateDefinitionID(meanings.length);
+        }
+        else {
+            stringifyMeanings = meanings[0].replace(/<[^>]*>/g, "");
+            definitionsID = this.generateUID();
+        }
 
-        this.sendToServiceWorker(word, stringifyMeanings, 'LVL6');
+        this.sendToServiceWorker(word, stringifyMeanings, definitionsID, 'LVL6');
     }
 
-    sendToServiceWorker(word: string, meanings: string, category: string) {
-        chrome.runtime.sendMessage({ message: "store", payload: { word, meanings, category, sheetID: this.sheetID } }, () => { });
+    sendToServiceWorker(word: string, meanings: string, definitionsID: string, category: string) {
+        chrome.runtime.sendMessage({
+            message: "store", payload: {
+                word,
+                meanings,
+                category,
+                sheetID: this.sheetID,
+                setID: process.env.SET_ID,
+                definitionsID
+            }
+        }, () => { });
+    }
+
+    generateDefinitionID(count: number) {
+        let ids = '';
+        for (let i = 0; i < count; i++) {
+            ids += this.generateUID();
+            if (count + 1 < count) ids += "\n" + '---' + "\n";
+        }
+        return ids;
+    }
+
+    generateUID() {
+        var ID_LENGTH = 5;
+        var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var rtn = '';
+        for (var i = 0; i < ID_LENGTH; i++) {
+            rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+        }
+        return rtn;
     }
 
     parseMeanings(meanings: Array<string>) {
