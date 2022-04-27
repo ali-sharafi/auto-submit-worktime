@@ -85,6 +85,7 @@ export default {
   methods: {
     save() {
       StorageService.store(this.localTranslation.word, this.items);
+      this.items = []
     },
     close() {
       this.hidden = true;
@@ -97,7 +98,6 @@ export default {
         let itemIndex = this.items.indexOf(item);
         this.items.splice(itemIndex, 1);
       } else this.items.push(item);
-      console.log("item: ", item.replace(/<[^>]*>/g, ""));
     },
   },
 };
