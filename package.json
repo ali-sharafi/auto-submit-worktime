@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/chrome": "0.0.181",
+    "@types/uuid": "^8.3.4",
     "cross-env": "^7.0.3",
     "dotenv-webpack": "^7.1.0",
     "laravel-mix": "^6.0.43",
@@ -33,6 +34,10 @@
     "@types/vue": "^2.0.0",
     "axios": "^0.26.1",
     "element-ui": "^2.15.8",
+    "uuid": "^8.3.2",
     "vue": "^2.6.14"
+  },
+  "volta": {
+    "node": "15.14.0"
   }
 }

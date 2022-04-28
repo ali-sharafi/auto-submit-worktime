@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 
 declare type TranslationPayload = {
     word: string;
@@ -69,11 +70,5 @@ async function append(payload: TranslationPayload, token: string) {
 }
 
 function generateUID() {
-    var ID_LENGTH = 5;
-    var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var rtn = '';
-    for (var i = 0; i < ID_LENGTH; i++) {
-        rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
-    }
-    return rtn;
+    return uuidv4();
 }

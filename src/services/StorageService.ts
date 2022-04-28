@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const StorageService = class {
     sheetID: string;
 
@@ -43,13 +45,7 @@ const StorageService = class {
     }
 
     generateUID() {
-        var ID_LENGTH = 5;
-        var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        var rtn = '';
-        for (var i = 0; i < ID_LENGTH; i++) {
-            rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
-        }
-        return rtn;
+        return uuidv4();
     }
 
     parseMeanings(meanings: Array<string>) {
