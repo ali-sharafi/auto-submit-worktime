@@ -82,10 +82,24 @@ export default {
       return this.localTranslation.meanings;
     },
   },
+  mounted() {
+    chrome.runtime.onMessage.addListener((request, sender) => {
+      if (request.type === "updateRes") {
+        this.updateStoredStatus(request.message, request.payload);
+      }
+    });
+  },
   methods: {
+    updateStoredStatus(message, payload) {
+      if (message == "success") {
+        this.close();
+      } else {
+        alert(payload);
+      }
+    },
     save() {
       StorageService.store(this.localTranslation.word, this.items);
-      this.items = []
+      this.items = [];
     },
     close() {
       this.hidden = true;
@@ -104,11 +118,17 @@ export default {
 </script>
 
 <style scoped>
+.close-button span {
+  margin-top: -2px;
+}
 .close-button {
   position: absolute;
   left: -30px;
   top: -20px;
   z-index: 20;
+  height: 35px;
+  width: 35px;
+  padding: 1px;
 }
 .save-button {
   position: absolute;

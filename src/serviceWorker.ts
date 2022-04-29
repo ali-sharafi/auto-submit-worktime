@@ -21,8 +21,16 @@ chrome.runtime.onMessage.addListener(
 function store(payload: TranslationPayload) {
     chrome.identity.getAuthToken({ interactive: true }, async (token) => {
         let appendRes = await append(payload, token);
-        console.log('appendRes: ', appendRes, 'token: ', token);
+        if (appendRes && appendRes.updates && appendRes.updates.updatedRows > 0) {
+            sendUpdatedStatus('success');
+        } else sendUpdatedStatus('error', appendRes);
     })
+}
+
+function sendUpdatedStatus(message: string, payload: object | null = null) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id as number, { type: 'updateRes', message, payload }, () => { });
+    });
 }
 
 async function append(payload: TranslationPayload, token: string) {
