@@ -1,4 +1,4 @@
-# <p align="center">Translator Chrome extension</p>
+# <p align="center">Chrome extension Translator</p>
 
 ## Introduction
 
