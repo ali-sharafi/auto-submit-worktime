@@ -2,6 +2,12 @@
   <div :class="{ 'translator-wraper': true, hidden: hidden }">
     <el-tabs class="main-card" type="card">
       <el-tab-pane label="Learners">
+        <el-row class="translation-item">
+          <el-input
+            v-model="additionalMeaning"
+            placeholder="Additional Meaning"
+          ></el-input>
+        </el-row>
         <el-row
           class="translation-item"
           v-for="(item, index) in learners"
@@ -13,6 +19,12 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="Examples">
+        <el-row class="translation-item">
+          <el-input
+            v-model="additionalExample"
+            placeholder="Additional Example"
+          ></el-input>
+        </el-row>
         <el-row
           class="translation-item"
           v-for="(item, index) in examples"
@@ -51,6 +63,7 @@ import {
   Checkbox,
   CheckboxGroup,
   Button,
+  Input,
 } from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 export default {
@@ -61,12 +74,15 @@ export default {
     "el-checkbox": Checkbox,
     "el-checkbox-group": CheckboxGroup,
     "el-button": Button,
+    "el-input": Input,
   },
   props: ["translation"],
   data() {
     return {
       activeName: "first",
       items: [],
+      additionalMeaning: "",
+      additionalExample: "",
       localTranslation: this.translation,
       hidden: false,
     };
@@ -98,8 +114,12 @@ export default {
       }
     },
     save() {
+      if (this.additionalMeaning) this.items.push(this.additionalMeaning);
+      if (this.additionalExample) this.items.push(this.additionalExample);
       StorageService.store(this.localTranslation.word, this.items);
       this.items = [];
+      this.additionalMeaning = "";
+      this.additionalExample = ""
     },
     close() {
       this.hidden = true;
