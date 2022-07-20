@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 const StorageService = class {
@@ -8,18 +9,50 @@ const StorageService = class {
     }
 
     store(word: string, meanings: Array<string>): void {
-        let stringifyMeanings = '';
-        let definitionsID = '';
-        if (meanings.length > 1) {
-            stringifyMeanings = this.parseMeanings(meanings);
-            definitionsID = this.generateDefinitionID(meanings.length);
-        }
-        else {
-            stringifyMeanings = meanings[0].replace(/<[^>]*>/g, "");
-            definitionsID = this.generateUID();
-        }
+        const now = this.now();
+        let parsedMeanings = this.parseMeanings(meanings, now);
+        let definitionsID = this.generateDefinitionID(meanings.length);
+        const currentUser = localStorage.getItem(process.env.LOCAL_STORAGE_KEY!);
+        if (currentUser) {
+            let parsedUser = JSON.parse(currentUser);
+            this.storeToUlangi(word, parsedMeanings, definitionsID, 'Lingemy', now, parsedUser.setID)
+        } else this.sendUpdatedStatus('error', { error: "Pls login first" })
 
-        this.sendToServiceWorker(word, stringifyMeanings, definitionsID, 'LVL6');
+        // this.sendToServiceWorker(word, stringifyMeanings, definitionsID, 'LVL6');
+    }
+
+    storeToUlangi(word: string, meanings: Array<object>, definitionsID: string, category: string, now: string, setID: string) {
+        axios.post(process.env.ULANGI_SERVER + "/upload-vocabulary", {
+            "vocabularyList": [
+                {
+                    "vocabularyId": definitionsID,
+                    "vocabularyStatus": "ACTIVE",
+                    "vocabularyText": word,
+                    "definitions": meanings,
+                    "category": {
+                        "categoryName": category,
+                        "createdAt": now,
+                        "updatedAt": now,
+                        "firstSyncedAt": null,
+                        "lastSyncedAt": null
+                    },
+                    "lastLearnedAt": null,
+                    "level": 0,
+                    "createdAt": now,
+                    "updatedAt": now,
+                    "updatedStatusAt": now,
+                    "firstSyncedAt": null,
+                    "lastSyncedAt": null,
+                    "extraData": []
+                }],
+            "vocabularySetIdPairs": [[definitionsID, setID]]
+        }).then(res => {
+            if (res.data && res.data.acknowledged) {
+                this.sendUpdatedStatus('success')
+            } else this.sendUpdatedStatus('error', res.data)
+        }).catch(err => {
+            this.sendUpdatedStatus('error', err.response.data)
+        })
     }
 
     sendToServiceWorker(word: string, meanings: string, definitionsID: string, category: string) {
@@ -35,6 +68,12 @@ const StorageService = class {
         }, () => { });
     }
 
+    sendUpdatedStatus(message: string, payload: object | null = null) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id as number, { type: 'updateRes', message, payload }, () => { });
+        });
+    }
+
     generateDefinitionID(count: number) {
         let ids = '';
         for (let i = 0; i < count; i++) {
@@ -48,14 +87,32 @@ const StorageService = class {
         return uuidv4();
     }
 
-    parseMeanings(meanings: Array<string>) {
-        let result = '';
+    parseMeanings(meanings: Array<string>, now: string) {
+        let result = [];
         for (let i = 0; i < meanings.length; i++) {
             const element = meanings[i];
-            result += element.replace(/<[^>]*>/g, "");
-            if (meanings[i + 1]) result += "\n" + '---' + "\n";
+            const meaning = element.replace(/<[^>]*>/g, "");
+
+            result.push({
+                "definitionId": this.generateUID(),
+                "definitionStatus": "ACTIVE",
+                "meaning": meaning,
+                "wordClasses": [],
+                "source": "N/A",
+                "createdAt": now,
+                "updatedAt": now,
+                "updatedStatusAt": now,
+                "firstSyncedAt": null,
+                "lastSyncedAt": null,
+                "extraData": []
+            });
         }
         return result;
+    }
+
+    now() {
+        let date = new Date();
+        return date.toISOString();
     }
 }
 
