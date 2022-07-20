@@ -68,7 +68,7 @@ export default {
     },
   },
   created() {
-    let localStorageUser = localStorage.getItem("ulangi-translator-user");
+    let localStorageUser = localStorage.getItem(process.env.LOCAL_STORAGE_KEY);
     if (localStorageUser) {
       this.user = JSON.parse(localStorageUser);
       this.getMe();
@@ -94,7 +94,7 @@ export default {
         name: "",
         token: "",
       };
-      localStorage.removeItem("ulangi-translator-user");
+      localStorage.removeItem(process.env.LOCAL_STORAGE_KEY);
     },
     afterGetToken(response) {
       if (response && response.token) {
@@ -110,7 +110,7 @@ export default {
         if (setID) {
           response.setID = setID;
           localStorage.setItem(
-            "ulangi-translator-user",
+            process.env.LOCAL_STORAGE_KEY,
             JSON.stringify(response)
           );
           this.user = response;
