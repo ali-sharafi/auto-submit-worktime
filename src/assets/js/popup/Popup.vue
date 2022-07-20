@@ -104,14 +104,39 @@ export default {
     logout() {
       this.clearUser();
     },
-    afterLogin(response, success) {
+    async afterLogin(response, success) {
       if (success) {
-        localStorage.setItem(
-          "ulangi-translator-user",
-          JSON.stringify(response)
-        );
-        this.user = response;
+        let setID = await this.getUserSetID(response.accessToken);
+        if (setID) {
+          response.setID = setID;
+          localStorage.setItem(
+            "ulangi-translator-user",
+            JSON.stringify(response)
+          );
+          this.user = response;
+        } else this.errors = "Failed in get SETID";
       } else this.errors = response;
+    },
+    async getUserSetID(accessToken) {
+      let res = await axios.get(
+        process.env.ULANGI_SERVER +
+          "/download-sets?startAt=2022-01-11T05:10:19.000Z&softLimit=40",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (res && res.data && res.data.setList) {
+        let setItem = res.data.setList.find(
+          (item) =>
+            item.learningLanguageCode == "en" &&
+            item.translatedToLanguageCode == "en"
+        );
+        return setItem ? setItem.setId : null;
+      }
+      return null;
     },
     login() {
       this.isLoading = true;
