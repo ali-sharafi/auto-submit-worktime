@@ -47,7 +47,12 @@
         </el-row>
       </el-tab-pane>
     </el-tabs>
-    <el-button class="save-button" type="success" @click="save">Save</el-button>
+    <el-button
+      :class="{ 'save-button': true, loading: isLoading }"
+      type="success"
+      @click="save"
+      >Save</el-button
+    >
     <el-button class="close-button" type="danger" circle @click="close"
       >X</el-button
     >
@@ -85,6 +90,7 @@ export default {
       additionalExample: "",
       localTranslation: this.translation,
       hidden: false,
+      isLoading: false,
     };
   },
   computed: {
@@ -101,6 +107,7 @@ export default {
   mounted() {
     chrome.runtime.onMessage.addListener((request, sender) => {
       if (request.type === "updateRes") {
+        this.isLoading = false;
         this.updateStoredStatus(request.message, request.payload);
       }
     });
@@ -116,10 +123,11 @@ export default {
     save() {
       if (this.additionalMeaning) this.items.push(this.additionalMeaning);
       if (this.additionalExample) this.items.push(this.additionalExample);
+      this.isLoading = true;
       StorageService.store(this.localTranslation.word, this.items);
       this.items = [];
       this.additionalMeaning = "";
-      this.additionalExample = ""
+      this.additionalExample = "";
     },
     close() {
       this.hidden = true;
@@ -152,7 +160,7 @@ export default {
 }
 .save-button {
   position: absolute;
-  left: -67px;
+  left: -77px;
   top: 260px;
   border-radius: 4px 0 0;
 }
