@@ -68,11 +68,12 @@ export default {
     },
   },
   created() {
-    let localStorageUser = localStorage.getItem(process.env.LOCAL_STORAGE_KEY);
-    if (localStorageUser) {
-      this.user = JSON.parse(localStorageUser);
-      this.getMe();
-    }
+    chrome.storage.local.get(process.env.LOCAL_STORAGE_KEY).then((result) => {
+      if (result.hasOwnProperty(process.env.LOCAL_STORAGE_KEY)) {
+        this.user = JSON.parse(result[process.env.LOCAL_STORAGE_KEY]);
+        this.getMe();
+      }
+    });
   },
   methods: {
     getMe() {
@@ -94,7 +95,7 @@ export default {
         name: "",
         token: "",
       };
-      localStorage.removeItem(process.env.LOCAL_STORAGE_KEY);
+      chrome.storage.local.remove(process.env.LOCAL_STORAGE_KEY);
     },
     afterGetToken(response) {
       if (response && response.token) {
@@ -109,10 +110,9 @@ export default {
         let setID = await this.getUserSetID(response.accessToken);
         if (setID) {
           response.setID = setID;
-          localStorage.setItem(
-            process.env.LOCAL_STORAGE_KEY,
-            JSON.stringify(response)
-          );
+          let dataToStore = {};
+          dataToStore[process.env.LOCAL_STORAGE_KEY] = JSON.stringify(response);
+          chrome.storage.local.set(dataToStore);
           this.user = response;
         } else this.errors = "Failed in get SETID";
       } else this.errors = response;
