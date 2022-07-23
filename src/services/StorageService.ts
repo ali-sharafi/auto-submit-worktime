@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 const StorageService = class {
@@ -8,61 +7,34 @@ const StorageService = class {
         this.sheetID = process.env.SHEET_ID!;
     }
 
-    store(word: string, meanings: Array<string>): void {
+    async store(word: string, meanings: Array<string>): Promise<void> {
         const now = this.now();
         let parsedMeanings = this.parseMeanings(meanings, now);
         let definitionsID = this.generateDefinitionID(meanings.length);
-        const currentUser = localStorage.getItem(process.env.LOCAL_STORAGE_KEY!);
+        const currentUser = await this.getCurrentUser();
         if (currentUser) {
-            let parsedUser = JSON.parse(currentUser);
-            this.storeToUlangi(word, parsedMeanings, definitionsID, 'Lingemy', now, parsedUser.setID)
+            this.sendToServiceWorker(word, parsedMeanings, definitionsID, 'Lingemy', now, currentUser.setID, currentUser.accessToken);
         } else this.sendUpdatedStatus('error', { error: "Pls login first" })
-
-        // this.sendToServiceWorker(word, stringifyMeanings, definitionsID, 'LVL6');
     }
 
-    storeToUlangi(word: string, meanings: Array<object>, definitionsID: string, category: string, now: string, setID: string) {
-        axios.post(process.env.ULANGI_SERVER + "/upload-vocabulary", {
-            "vocabularyList": [
-                {
-                    "vocabularyId": definitionsID,
-                    "vocabularyStatus": "ACTIVE",
-                    "vocabularyText": word,
-                    "definitions": meanings,
-                    "category": {
-                        "categoryName": category,
-                        "createdAt": now,
-                        "updatedAt": now,
-                        "firstSyncedAt": null,
-                        "lastSyncedAt": null
-                    },
-                    "lastLearnedAt": null,
-                    "level": 0,
-                    "createdAt": now,
-                    "updatedAt": now,
-                    "updatedStatusAt": now,
-                    "firstSyncedAt": null,
-                    "lastSyncedAt": null,
-                    "extraData": []
-                }],
-            "vocabularySetIdPairs": [[definitionsID, setID]]
-        }).then(res => {
-            if (res.data && res.data.acknowledged) {
-                this.sendUpdatedStatus('success')
-            } else this.sendUpdatedStatus('error', res.data)
-        }).catch(err => {
-            this.sendUpdatedStatus('error', err.response.data)
-        })
+    async getCurrentUser() {
+        let currentUser = await chrome.storage.local.get(process.env.LOCAL_STORAGE_KEY);
+        if (currentUser.hasOwnProperty(process.env.LOCAL_STORAGE_KEY!)) {
+            return JSON.parse(currentUser[process.env.LOCAL_STORAGE_KEY!]);
+        }
+        return null;
     }
 
-    sendToServiceWorker(word: string, meanings: string, definitionsID: string, category: string) {
+    sendToServiceWorker(word: string, meanings: Array<object>, definitionsID: string, category: string, now: string, setID: string, userToken: string) {
         chrome.runtime.sendMessage({
             message: "store", payload: {
                 word,
                 meanings,
                 category,
+                now,
+                setID,
+                userToken,
                 sheetID: this.sheetID,
-                setID: process.env.SET_ID,
                 definitionsID
             }
         }, () => { });
