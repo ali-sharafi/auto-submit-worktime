@@ -23,23 +23,20 @@
 	],
 	"permissions": [
 		"identity",
-		"scripting"
+		"scripting",
+		"storage"
 	],
 	"host_permissions": [
 		"*://*/*"
 	],
 	"action": {
-		"default_icon": "icon.png",
-		"default_title": "Translator"
+		"default_icon": "./icons/icon16.png",
+		"default_title": "Translator",
+		"default_popup": "popup.html"
 	},
-	"oauth2": {
-		"client_id": "<Client ID>",
-		"scopes": [
-			"https://www.googleapis.com/auth/spreadsheets",
-			"https://www.googleapis.com/auth/drive",
-			"https://www.googleapis.com/auth/drive.readonly",
-			"https://www.googleapis.com/auth/drive.file",
-			"https://www.googleapis.com/auth/spreadsheets.readonly"
-		]
+	"icons": {
+		"16": "./icons/icon16.png",
+		"48": "./icons/icon48.png",
+		"128": "./icons/icon128.png"
 	}
 }
