@@ -4,7 +4,7 @@
 
 To install this extension you need to go to the Extension page in your chrome browser and active developer mode then you must choose the dist folder then the extension will be loaded.
 
-After installing the extension you need to login into your account by clicking on the extension icon, after logging in if you want to submit your current day worktime just click on ASW! button and it'll do. This extension remind everyday at 18:30 to submit your worktime and just by clicking the button on the notification it'll submit for you.
+After installing the extension you need to login into your account by clicking on the extension icon, after logging in if you want to submit your current day work time click on ASW! button and it'll do. This extension reminds you every day at 18:30 to submit your worktime and just by clicking the button on the notification it'll submit for you.
 
 
 ### Development Guide
