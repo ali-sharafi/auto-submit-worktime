@@ -1,42 +1,48 @@
 {
 	"manifest_version": 3,
-	"name": "Translator",
-	"description": "Add your new vocabulary to learning docs",
-	"version": "1.0",
+	"name": "ASW",
+	"description": "Auto submit worktime",
+	"version": "0.1",
 	"background": {
 		"service_worker": "/js/main.js"
 	},
-	"content_scripts": [
-		{
-			"all_frames": true,
-			"matches": [
-				"http://*/*",
-				"https://*/*"
-			],
-			"js": [
-				"/js/app.js"
-			],
-			"css": [
-				"/css/app.css"
-			]
-		}
-	],
 	"permissions": [
-		"identity",
+		"activeTab",
 		"scripting",
-		"storage"
+		"storage",
+		"alarms",
+		"notifications",
+		"webNavigation"
 	],
 	"host_permissions": [
 		"*://*/*"
 	],
 	"action": {
 		"default_icon": "./icons/icon16.png",
-		"default_title": "Translator",
+		"default_title": "ASW",
 		"default_popup": "popup.html"
 	},
 	"icons": {
 		"16": "./icons/icon16.png",
 		"48": "./icons/icon48.png",
 		"128": "./icons/icon128.png"
-	}
+	},
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"./icons/*.png"
+			],
+			"matches": [
+				"*://*/*"
+			]
+		},
+		{
+			"resources": [
+				"/js/asw.js"
+			],
+			"matches": [
+				"<all_urls>"
+			]
+		}
+	]
 }
